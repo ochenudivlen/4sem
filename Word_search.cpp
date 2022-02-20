@@ -1,3 +1,5 @@
+//First homework
+
 #include <map>
 #include <vector>
 #include <algorithm>
@@ -15,7 +17,7 @@ std::string prepare(const std::string& s)
 {
     std::string result = s;
 
-    while (!isalpha(result.back()))     //Считаем, что цифры не могут являться частью слова, иначе isalumn
+    while (!isalpha(result.back()))     //or isalumn
     {
         result.pop_back();
     }
