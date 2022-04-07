@@ -9,24 +9,19 @@ std::string prepare(const std::string& s)
 {
     std::string result = s;
 
-	for (int i(0); i < result.size(); i++)    //or isalumn
-    {
-		if (result[i] == ' ')
-		{
-			result.erase(i--, 1);
-		}
-    }
+	auto newEnd = std::remove_if(result.begin(), result.end(), 
+		[](char c) {return c == ' ';});
+
+	result.erase(newEnd, result.end());
 
     std::transform(result.begin(), result.end(), result.begin(),
-        [](unsigned char c) {return std::tolower(c);});
+        [](char c) {return std::tolower(c);});
 
     return result;
 }
 
 int main()
 {
-	int N = 11;
-
 	std::vector<std::string> vec;
 	vec.push_back("Aa A");
 	vec.push_back("cC C");
@@ -40,32 +35,20 @@ int main()
 	vec.push_back("f f f");
 	vec.push_back("AAA  ");
 
-	for (int i(0); i < N; i++)
-	{
-		std::cout << vec[i] << endl;
-		vec[i] = prepare(vec[i]);
-	}
+	std::transform(vec.begin(), vec.end(), vec.begin(),
+		[](const string& s) {return prepare(s); });
 
-	std::cout << endl;
+	std::sort(vec.begin(), vec.end());
 
-	std::sort(vec.begin(), vec.end(), [&](auto a, auto b)
-		{
-			return a < b;
-		});
-
-	std::vector<string>::iterator it;
-	it = std::unique(vec.begin(), vec.end(), [=](auto a, auto b)
-		{
-			return a == b;
-		});
+	auto it = std::unique(vec.begin(), vec.end());
 
 	vec.resize(std::distance(vec.begin(), it));
 
 	std::cout << "N: " << vec.size() << endl;
 
-	for (std::vector<std::string>::size_type i = 0; i != vec.size(); i++)
+	for (const auto& s : vec)
 	{
-		cout << vec[i] << endl;
+		cout << s << endl;
 	}
 
 	return 0;
