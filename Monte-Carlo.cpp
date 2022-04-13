@@ -7,9 +7,9 @@
 #include<ctime>
 #include<cstdlib>
 
-const int R = 100;
-const int N = 10;
-const int Size = 10000000;
+const int R    = 100;
+const int N    = 10;
+const int Size = 1000000;
 
 # define M_PI 3.141592653589793238462643383279502884L /* pi */
 
@@ -28,21 +28,7 @@ int main()
 	std::vector<int> vec3(N * Size);
 	for (int& x : vec3) x = rand() % (2 * R) - R;
 
-	std::vector<int> vec(N * Size);
-
 	std::cout << "ball:" << endl;
-
-	for (int i = 0; i < N * Size; ++i)
-	{
-		if (sqrt((vec1[i]) * (vec1[i]) + (vec2[i]) * (vec2[i]) + (vec3[i]) * (vec3[i])) < R * 1.0)
-		{
-			vec[i] = 1;
-		}
-		else
-		{
-			vec[i] = 0;
-		}
-	}
 
 	std::chrono::high_resolution_clock::time_point start1 = std::chrono::high_resolution_clock::now();
 
@@ -50,9 +36,18 @@ int main()
 
 	for (int i = 0; i < N; ++i)
 	{
-		f.push_back(std::async([&vec, i]()
+		f.push_back(std::async([&vec1, &vec2, &vec3, i]()
 			{
-				int sum = std::accumulate(vec.begin() + i * Size, vec.begin() + (i + 1) * Size, 0, std::plus<int>());
+				int sum = 0;
+
+				for (int j = i * Size; j < (i + 1) * Size; ++j)
+				{
+					if (sqrt((vec1[j]) * (vec1[j]) + (vec2[j]) * (vec2[j]) + (vec3[j]) * (vec3[j])) < R * 1.0)
+					{
+						++sum;
+					}
+				}
+
 				return sum;
 			})
 		);
@@ -72,27 +67,24 @@ int main()
 
 	std::cout << "circle:" << endl;
 
-	for (int i = 0; i < N * Size; ++i)
-	{
-		if (sqrt((vec1[i]) * (vec1[i]) + (vec2[i]) * (vec2[i])) < R * 1.0)
-		{
-			vec[i] = 1;
-		}
-		else
-		{
-			vec[i] = 0;
-		}
-	}
-
 	std::chrono::high_resolution_clock::time_point start2 = std::chrono::high_resolution_clock::now();
 
 	std::vector<std::future<int>> l;
 
 	for (int i = 0; i < N; ++i)
 	{
-		l.push_back(std::async([&vec, i]()
+		l.push_back(std::async([&vec1, &vec2, &vec3, i]()
 			{
-				int sum = std::accumulate(vec.begin() + i * Size, vec.begin() + (i + 1) * Size, 0, std::plus<int>());
+				int sum = 0;
+
+				for (int j = i * Size; j < (i + 1) * Size; ++j)
+				{
+					if (sqrt((vec1[j]) * (vec1[j]) + (vec2[j]) * (vec2[j])) < R * 1.0)
+					{
+						++sum;
+					}
+				}
+
 				return sum;
 			})
 		);
