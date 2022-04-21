@@ -1,0 +1,44 @@
+#include <iostream>
+
+using namespace std;
+/*
+template <int n, int k>
+struct C
+{
+	enum
+	{
+		result = C <n - 1, k - 1>::result + C <n - 1, k>::result
+	};
+};
+
+template <int n>
+struct C <n, 0>
+{
+	static const int result = 1;
+};
+
+template <int n>
+struct C <n, n>
+{
+	static const int result = 1;
+};
+
+template <>
+struct C <0, 0>
+{
+	static const int result = 1;
+};
+*/
+
+constexpr int C(int n, int k)
+{
+	return (k == 0 || n == k) ? 1 : C(n - 1, k - 1) + C(n - 1, k);
+}
+
+int main()
+{
+//	std::cout << C <0, 0>::result << endl;
+	std::cout << C(150, 10) << endl;
+
+	return 0;
+}
